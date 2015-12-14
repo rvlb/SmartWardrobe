@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.bMyFriends:
-                startActivity(new Intent(this, AddFriendActivity.class));
+                startActivity(new Intent(this, MyFriendsActivity.class));
                 break;
 
             case R.id.bLogout:

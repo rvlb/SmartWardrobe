@@ -47,20 +47,20 @@ public class AddFriendActivity extends AppCompatActivity implements View.OnClick
             public void done(ServerResponse serverResponse) {
                 Log.d("serverResponseAddF", serverResponse.response);
                 if(serverResponse.response.equals("blank fields")) {
-                    AlertMessage.show("Please fill all the fields.", "Ok", AddFriendActivity.this);
+                    Misc.showAlertMsg("Please fill all the fields.", "Ok", AddFriendActivity.this);
                 } else if(serverResponse.response.equals("same user")) {
-                    AlertMessage.show("Please choose a user that isn't you.", "Ok", AddFriendActivity.this);
+                    Misc.showAlertMsg("Please choose a user that isn't you.", "Ok", AddFriendActivity.this);
                 } else if(serverResponse.response.equals("friendship exists")) {
-                    AlertMessage.show("Friendship already exists.", "Ok", AddFriendActivity.this);
+                    Misc.showAlertMsg("Friendship already exists.", "Ok", AddFriendActivity.this);
                 } else if(serverResponse.response.equals("invalid user")) {
-                    AlertMessage.show("Invalid user.", "Ok", AddFriendActivity.this);
+                    Misc.showAlertMsg("Invalid user.", "Ok", AddFriendActivity.this);
                 } else if(serverResponse.response.equals("error")) {
-                    AlertMessage.show("An error occurred while trying to connect.", "Ok", AddFriendActivity.this);
+                    Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", AddFriendActivity.this);
                 } else if(serverResponse.response.equals("failure")) {
-                    AlertMessage.show("An error occurred.", "Ok", AddFriendActivity.this);
+                    Misc.showAlertMsg("An error occurred.", "Ok", AddFriendActivity.this);
                 } else if(serverResponse.response.equals("success")) {
-                    AlertMessage.show("Friendship successfully started!", "Ok", AddFriendActivity.this);
-                    startActivity(new Intent(AddFriendActivity.this, MainActivity.class));
+                    Misc.showAlertMsg("Friendship successfully started!", "Ok", AddFriendActivity.this);
+                    startActivity(new Intent(AddFriendActivity.this, MyFriendsActivity.class));
                 }
             }
         });

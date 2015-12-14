@@ -4,6 +4,12 @@ public class User {
 
     String name, password, passwordRep;
 
+    public User(String name) {
+        this.name = name;
+        this.password = "";
+        this.passwordRep = "";
+    }
+
     public User(String name, String password) {
         this.name = name;
         this.password = password;

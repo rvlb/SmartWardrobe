@@ -1,7 +1,5 @@
 package com.arara.smartwardrobe;
 
-import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -54,13 +52,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void done(ServerResponse serverResponse) {
                 if(serverResponse.response.equals("error")) {
-                    AlertMessage.show("An error occurred while trying to connect.", "Ok", LoginActivity.this);
+                    Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", LoginActivity.this);
                 } else if(serverResponse.response.equals("blank fields")) {
-                    AlertMessage.show("Please fill all the fields.", "Ok", LoginActivity.this);
+                    Misc.showAlertMsg("Please fill all the fields.", "Ok", LoginActivity.this);
                 } else if(serverResponse.response.equals("invalid user")) {
-                    AlertMessage.show("Invalid user.", "Ok", LoginActivity.this);
+                    Misc.showAlertMsg("Invalid user.", "Ok", LoginActivity.this);
                 } else if(serverResponse.response.equals("wrong password")) {
-                    AlertMessage.show("Wrong password.", "Ok", LoginActivity.this);
+                    Misc.showAlertMsg("Wrong password.", "Ok", LoginActivity.this);
                 } else if(serverResponse.response.equals("success") && serverResponse.returnedUser != null) {
                     logUser(serverResponse.returnedUser);
                 }

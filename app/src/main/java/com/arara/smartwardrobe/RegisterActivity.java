@@ -1,6 +1,5 @@
 package com.arara.smartwardrobe;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -47,17 +46,17 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             public void done(ServerResponse serverResponse) {
                 Log.d("serverResponseReg", serverResponse.response);
                 if(serverResponse.response.equals("blank fields")) {
-                    AlertMessage.show("Please fill all the fields.", "Ok", RegisterActivity.this);
+                    Misc.showAlertMsg("Please fill all the fields.", "Ok", RegisterActivity.this);
                 } else if(serverResponse.response.equals("user exists")) {
-                    AlertMessage.show("User already exists.", "Ok", RegisterActivity.this);
+                    Misc.showAlertMsg("User already exists.", "Ok", RegisterActivity.this);
                 } else if(serverResponse.response.equals("failure")) {
-                    AlertMessage.show("An error occurred.", "Ok", RegisterActivity.this);
+                    Misc.showAlertMsg("An error occurred.", "Ok", RegisterActivity.this);
                 } else if(serverResponse.response.equals("different passwords")) {
-                    AlertMessage.show("Passwords don't match.", "Ok", RegisterActivity.this);
+                    Misc.showAlertMsg("Passwords don't match.", "Ok", RegisterActivity.this);
                 } else if(serverResponse.response.equals("error")) {
-                    AlertMessage.show("An error occurred while trying to connect.", "Ok", RegisterActivity.this);
+                    Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", RegisterActivity.this);
                 } else if(serverResponse.response.equals("success")) {
-                    AlertMessage.show("User successfully registered!", "Ok", RegisterActivity.this);
+                    Misc.showAlertMsg("User successfully registered!", "Ok", RegisterActivity.this);
                     startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                 }
             }

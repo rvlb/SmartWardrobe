@@ -84,17 +84,17 @@ public class AddWearableActivity extends AppCompatActivity implements View.OnCli
             public void done(ServerResponse serverResponse) {
                 Log.d("serverResponseAddW", serverResponse.response);
                 if(serverResponse.response.equals("blank fields")) {
-                    AlertMessage.show("Please fill all the fields.", "Ok", AddWearableActivity.this);
+                    Misc.showAlertMsg("Please fill all the fields.", "Ok", AddWearableActivity.this);
                 } else if(serverResponse.response.equals("wearable exists")) {
-                    AlertMessage.show("Wearable already exists.", "Ok", AddWearableActivity.this);
+                    Misc.showAlertMsg("Wearable already exists.", "Ok", AddWearableActivity.this);
                 } else if(serverResponse.response.equals("full table")) {
-                    AlertMessage.show("Full table.", "Ok", AddWearableActivity.this);
+                    Misc.showAlertMsg("Full table.", "Ok", AddWearableActivity.this);
                 } else if(serverResponse.response.equals("error")) {
-                    AlertMessage.show("An error occurred while trying to connect.", "Ok", AddWearableActivity.this);
+                    Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", AddWearableActivity.this);
                 } else if(serverResponse.response.equals("failure")) {
-                    AlertMessage.show("An error occurred.", "Ok", AddWearableActivity.this);
+                    Misc.showAlertMsg("An error occurred.", "Ok", AddWearableActivity.this);
                 } else if(serverResponse.response.equals("success")) {
-                    AlertMessage.show("Wearable successfully added!", "Ok", AddWearableActivity.this);
+                    Misc.showAlertMsg("Wearable successfully added!", "Ok", AddWearableActivity.this);
                     startActivity(new Intent(AddWearableActivity.this, RFIDActivity.class));
                 }
             }

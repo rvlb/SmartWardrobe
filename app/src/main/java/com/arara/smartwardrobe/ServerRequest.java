@@ -13,12 +13,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.HashMap;
-import java.util.Map;
 
 public class ServerRequest {
 
@@ -67,7 +64,7 @@ public class ServerRequest {
 
                 OutputStream os = con.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-                writer.write(getPostDataString(dataToSend));
+                writer.write(Misc.getPostDataString(dataToSend));
                 writer.flush();
                 writer.close();
                 os.close();
@@ -91,22 +88,6 @@ public class ServerRequest {
                 e.printStackTrace();
             }
             return serverResponse;
-        }
-
-        private String getPostDataString(HashMap<String, String> data) throws UnsupportedEncodingException {
-            StringBuilder sb = new StringBuilder();
-            boolean first = true;
-            for(Map.Entry<String, String> entry : data.entrySet()) {
-                if (first) {
-                    first = false;
-                } else {
-                    sb.append("&");
-                }
-                sb.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
-                sb.append("=");
-                sb.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
-            }
-            return sb.toString();
         }
 
         @Override
@@ -258,6 +239,72 @@ public class ServerRequest {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            return serverResponse;
+        }
+
+        @Override
+        protected void onPostExecute(ServerResponse serverResponse) {
+            progressDialog.dismiss();
+            callback.done(serverResponse);
+            super.onPostExecute(serverResponse);
+        }
+    }
+
+    public void fetchFriendshipDataInBackground(User user, Callback callback) {
+        progressDialog.show();
+        new FetchFriendshipDataAsyncTask(user, callback).execute();
+    }
+
+    public class FetchFriendshipDataAsyncTask extends AsyncTask<Void, Void, ServerResponse> {
+
+        User user;
+        Callback callback;
+
+        public FetchFriendshipDataAsyncTask(User user, Callback callback) {
+            this.user = user;
+            this.callback = callback;
+        }
+
+        @Override
+        protected ServerResponse doInBackground(Void... params) {
+            HashMap<String, String> dataToSend = new HashMap<>();
+            dataToSend.put("name", user.name);
+            String response = "error";
+            ServerResponse serverResponse = new ServerResponse(null, null, response);
+
+            try {
+                URL url = new URL(SERVER_ADDRESS + "get_user_friends.php");
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setReadTimeout(CONNECTION_TIMEOUT);
+                con.setConnectTimeout(CONNECTION_TIMEOUT);
+                con.setRequestMethod("POST");
+                con.setDoInput(true);
+                con.setDoOutput(true);
+
+                OutputStream os = con.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                writer.write(Misc.getPostDataString(dataToSend));
+                writer.flush();
+                writer.close();
+                os.close();
+
+                int code = con.getResponseCode();
+                Log.d("code", code + "");
+
+                InputStream responseStream = new BufferedInputStream(con.getInputStream());
+                BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream));
+                response = responseStreamReader.readLine();
+                responseStreamReader.close();
+
+                serverResponse.response = response.replace("\"","");
+                serverResponse.response = serverResponse.response.replace("<br />", "");
+
+                Log.d("response", serverResponse.response);
+
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+
             return serverResponse;
         }
 
