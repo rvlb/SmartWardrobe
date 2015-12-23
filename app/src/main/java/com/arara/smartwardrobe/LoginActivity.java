@@ -16,6 +16,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     UserLocalStore userLocalStore;
 
+    Button bBT;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +32,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         tvRegister.setOnClickListener(this);
 
         userLocalStore = new UserLocalStore(this);
+
+        bBT = (Button) findViewById(R.id.bBT);
+        bBT.setOnClickListener(this);
     }
 
     @Override
@@ -42,6 +47,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             case R.id.tvRegister:
                 startActivity(new Intent(this, RegisterActivity.class));
+                break;
+
+            case R.id.bBT:
+                startActivity(new Intent(this, ScanLabelActivity.class));
                 break;
         }
     }

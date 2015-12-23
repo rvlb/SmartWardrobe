@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bRFID:
-                startActivity(new Intent(this, RFIDActivity.class));
+                startActivity(new Intent(this, ScanLabelActivity.class));
                 break;
 
             case R.id.bMyWearables:
