@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--<ListView
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="515dp"
         android:id="@+id/lvFriends">
-    </ListView>-->
+    </ListView>
 
     <Button
         android:layout_width="match_parent"

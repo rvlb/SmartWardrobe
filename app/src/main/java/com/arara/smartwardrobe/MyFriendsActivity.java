@@ -5,7 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,19 +20,34 @@ public class MyFriendsActivity extends AppCompatActivity implements View.OnClick
     UserLocalStore userLocalStore;
 
     List<String> friendsList;
+    ListView lvFriends;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_friends);
 
-        bAddFriend = (Button) findViewById(R.id.bAddFriend);
+        friendsList = new ArrayList<>();
 
+        bAddFriend = (Button) findViewById(R.id.bAddFriend);
         bAddFriend.setOnClickListener(this);
 
         userLocalStore = new UserLocalStore(this);
 
         loadFriendsList();
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, friendsList);
+        Log.d("adapterSize", adapter.getCount() + "");
+
+        lvFriends = (ListView) findViewById(R.id.lvFriends);
+        lvFriends.setAdapter(adapter);
+        lvFriends.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedFriend = (String) lvFriends.getItemAtPosition(position);
+                Misc.showAlertMsg("Clicked on " + selectedFriend, "Ok", MyFriendsActivity.this);
+            }
+        });
     }
 
     @Override
@@ -54,7 +72,6 @@ public class MyFriendsActivity extends AppCompatActivity implements View.OnClick
                     Misc.showAlertMsg("No friend found.", "Ok", MyFriendsActivity.this);
                 } else {
                     buildFriendsList(serverResponse.response);
-                    //Friend list loaded, now put it in the ListView
                 }
             }
         });
@@ -62,7 +79,7 @@ public class MyFriendsActivity extends AppCompatActivity implements View.OnClick
 
     private void buildFriendsList(String friendshipsData) {
 
-        friendsList = new ArrayList<>();
+        Log.d("debugTest", "Started building");
 
         Log.d("friendshipsData", friendshipsData);
 
@@ -77,9 +94,35 @@ public class MyFriendsActivity extends AppCompatActivity implements View.OnClick
             String friendName = (friends.get(0).equals(userLocalStore.getLoggedUser().name) ?
                                  friends.get(1) : friends.get(0));
 
-            Log.d("friend", friendName);
-
             friendsList.add(friendName);
+
+            Log.d("friendsList " + friendsList.size(), friendsList.get(friendsList.size() - 1));
         }
+
+        /*
+        TEST CASES FOR CHECKING THE CAPACITY OF INSERTING INTO THE VIEW
+        friendsList.add("Amigo Teste 1");
+        friendsList.add("Amigo Teste 2");
+        friendsList.add("Amigo Teste 3");
+        friendsList.add("Amigo Teste 4");
+        friendsList.add("Amigo Teste 5");
+        friendsList.add("Amigo Teste 6");
+        friendsList.add("Amigo Teste 7");
+        friendsList.add("Amigo Teste 8");
+        friendsList.add("Amigo Teste 9");
+        friendsList.add("Amigo Teste 10");
+        friendsList.add("Amigo Teste 11");
+        friendsList.add("Amigo Teste 12");
+        friendsList.add("Amigo Teste 13");
+        friendsList.add("Amigo Teste 14");
+        friendsList.add("Amigo Teste 15");
+        friendsList.add("Amigo Teste 16");
+        friendsList.add("Amigo Teste 17");
+        friendsList.add("Amigo Teste 18");
+        friendsList.add("Amigo Teste 19");
+        friendsList.add("Amigo Teste 20");
+        */
+
+        Log.d("debugTest", "Finished building");
     }
 }

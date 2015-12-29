@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 public class MyWearablesActivity extends AppCompatActivity {
 
+    //Passar um parametro para saber quem eh o usuario escolhido
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
