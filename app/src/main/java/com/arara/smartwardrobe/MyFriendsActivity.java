@@ -35,22 +35,6 @@ public class MyFriendsActivity extends AppCompatActivity implements View.OnClick
         userLocalStore = new UserLocalStore(this);
 
         loadFriendsList();
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, friendsList);
-        Log.d("adapterSize", adapter.getCount() + "");
-
-        lvFriends = (ListView) findViewById(R.id.lvFriends);
-        lvFriends.setAdapter(adapter);
-        lvFriends.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedFriend = (String) lvFriends.getItemAtPosition(position);
-                //Misc.showAlertMsg("Clicked on " + selectedFriend, "Ok", MyFriendsActivity.this);
-                Intent intent = new Intent(MyFriendsActivity.this, MyWearablesActivity.class);
-                intent.putExtra("owner", selectedFriend);
-                startActivity(intent);
-            }
-        });
     }
 
     @Override
@@ -75,6 +59,21 @@ public class MyFriendsActivity extends AppCompatActivity implements View.OnClick
                     Misc.showAlertMsg("No friend found.", "Ok", MyFriendsActivity.this);
                 } else {
                     buildFriendsList(serverResponse.response);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(MyFriendsActivity.this,
+                            android.R.layout.simple_list_item_1, friendsList);
+                    Log.d("adapterSize", adapter.getCount() + "");
+                    lvFriends = (ListView) findViewById(R.id.lvFriends);
+                    lvFriends.setAdapter(adapter);
+                    lvFriends.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            String selectedFriend = (String) lvFriends.getItemAtPosition(position);
+                            //Misc.showAlertMsg("Clicked on " + selectedFriend, "Ok", MyFriendsActivity.this);
+                            Intent intent = new Intent(MyFriendsActivity.this, MyWearablesActivity.class);
+                            intent.putExtra("owner", selectedFriend);
+                            startActivity(intent);
+                        }
+                    });
                 }
             }
         });
