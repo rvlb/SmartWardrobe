@@ -45,7 +45,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.bMyWearables:
-                startActivity(new Intent(this, MyWearablesActivity.class));
+                Intent intent = new Intent(this, MyWearablesActivity.class);
+                intent.putExtra("owner", userLocalStore.getLoggedUser().name);
+                startActivity(intent);
                 break;
 
             case R.id.bMyFriends:

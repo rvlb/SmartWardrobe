@@ -17,6 +17,14 @@ public class Misc {
         dialogBuilder.show();
     }
 
+    public static void showWearableData(Wearable wearable, Context context) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+        dialogBuilder.setTitle(wearable.type);
+        dialogBuilder.setMessage("testing");
+        dialogBuilder.setPositiveButton("Ok", null);
+        dialogBuilder.show();
+    }
+
     public static String getPostDataString(HashMap<String, String> data) throws UnsupportedEncodingException {
         StringBuilder sb = new StringBuilder();
         boolean first = true;

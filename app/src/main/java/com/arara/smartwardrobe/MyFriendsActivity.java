@@ -45,7 +45,10 @@ public class MyFriendsActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedFriend = (String) lvFriends.getItemAtPosition(position);
-                Misc.showAlertMsg("Clicked on " + selectedFriend, "Ok", MyFriendsActivity.this);
+                //Misc.showAlertMsg("Clicked on " + selectedFriend, "Ok", MyFriendsActivity.this);
+                Intent intent = new Intent(MyFriendsActivity.this, MyWearablesActivity.class);
+                intent.putExtra("owner", selectedFriend);
+                startActivity(intent);
             }
         });
     }
