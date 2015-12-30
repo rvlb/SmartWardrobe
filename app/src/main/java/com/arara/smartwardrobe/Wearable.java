@@ -1,6 +1,8 @@
 package com.arara.smartwardrobe;
 
-public class Wearable {
+import java.io.Serializable;
+
+public class Wearable implements Serializable {
 
     String id, colors, type, brand, description;
 
@@ -18,5 +20,18 @@ public class Wearable {
         this.type = type;
         this.brand = brand;
         this.description = description;
+    }
+
+    public Wearable() {
+        this.id = "";
+        this.colors = "";
+        this.type = "";
+        this.brand = "";
+        this.description = "";
+    }
+
+    @Override
+    public String toString() {
+        return this.brand + "'s " + this.colors + " " + this.type;
     }
 }

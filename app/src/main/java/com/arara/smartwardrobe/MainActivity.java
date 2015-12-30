@@ -8,7 +8,7 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button bRFID, bMyWearables, bMyFriends, bLogout;
+    Button bScanLabel, bMyWearables, bMyFriends, bLogout;
     UserLocalStore userLocalStore;
 
     @Override
@@ -16,12 +16,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        bRFID = (Button) findViewById(R.id.bRFID);
+        bScanLabel = (Button) findViewById(R.id.bScanLabel);
         bMyWearables = (Button) findViewById(R.id.bMyWearables);
         bMyFriends = (Button) findViewById(R.id.bMyFriends);
         bLogout= (Button) findViewById(R.id.bLogout);
 
-        bRFID.setOnClickListener(this);
+        bScanLabel.setOnClickListener(this);
         bMyWearables.setOnClickListener(this);
         bMyFriends.setOnClickListener(this);
         bLogout.setOnClickListener(this);
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.bRFID:
+            case R.id.bScanLabel:
                 startActivity(new Intent(this, ScanLabelActivity.class));
                 break;
 

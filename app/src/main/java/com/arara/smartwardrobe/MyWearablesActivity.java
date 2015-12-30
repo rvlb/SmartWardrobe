@@ -7,14 +7,16 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MyWearablesActivity extends AppCompatActivity {
 
-    List<String> wearablesList;
+    List<Wearable> wearablesList;
     ListView lvWearables;
 
     @Override
@@ -24,6 +26,25 @@ public class MyWearablesActivity extends AppCompatActivity {
 
         wearablesList = new ArrayList<>();
 
+        ArrayAdapter<Wearable> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, wearablesList);
+        Log.d("adapterSize", adapter.getCount() + "");
+        lvWearables = (ListView) findViewById(R.id.lvWearables);
+        lvWearables.setAdapter(adapter);
+        lvWearables.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Wearable selectedWearable = (Wearable) lvWearables.getItemAtPosition(position);
+                //Misc.showAlertMsg("Clicked on " + selectedWearable, "Ok", MyWearablesActivity.this);
+                Intent intent = new Intent(MyWearablesActivity.this, ViewWearableActivity.class);
+                intent.putExtra("selectedWearable", selectedWearable);
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         loadWearablesList();
     }
 
@@ -43,18 +64,7 @@ public class MyWearablesActivity extends AppCompatActivity {
                     finish();
                 } else {
                     buildWearablesList(serverResponse.response);
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(MyWearablesActivity.this,
-                            android.R.layout.simple_list_item_1, wearablesList);
-                    Log.d("adapterSize", adapter.getCount() + "");
-                    lvWearables = (ListView) findViewById(R.id.lvWearables);
-                    lvWearables.setAdapter(adapter);
-                    lvWearables.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            String selectedWearable = (String) lvWearables.getItemAtPosition(position);
-                            Misc.showAlertMsg("Clicked on " + selectedWearable, "Ok", MyWearablesActivity.this);
-                        }
-                    });
+                    ((BaseAdapter) lvWearables.getAdapter()).notifyDataSetChanged();
                 }
             }
         });
@@ -62,35 +72,30 @@ public class MyWearablesActivity extends AppCompatActivity {
 
     private void buildWearablesList(String wearablesData) {
 
+        wearablesList.clear();
+
         Log.d("debugTest", "Started building");
 
         Log.d("wearablesData", wearablesData);
 
-        //
+        List<String> wearableStrings = Arrays.asList(wearablesData.split("\\$"));
 
-        /*
-        TEST CASES FOR CHECKING THE CAPACITY OF INSERTING INTO THE VIEW
-        wearablesList.add("Roupa Teste 1");
-        wearablesList.add("Roupa Teste 2");
-        wearablesList.add("Roupa Teste 3");
-        wearablesList.add("Roupa Teste 4");
-        wearablesList.add("Roupa Teste 5");
-        wearablesList.add("Roupa Teste 6");
-        wearablesList.add("Roupa Teste 7");
-        wearablesList.add("Roupa Teste 8");
-        wearablesList.add("Roupa Teste 9");
-        wearablesList.add("Roupa Teste 10");
-        wearablesList.add("Roupa Teste 11");
-        wearablesList.add("Roupa Teste 12");
-        wearablesList.add("Roupa Teste 13");
-        wearablesList.add("Roupa Teste 14");
-        wearablesList.add("Roupa Teste 15");
-        wearablesList.add("Roupa Teste 16");
-        wearablesList.add("Roupa Teste 17");
-        wearablesList.add("Roupa Teste 18");
-        wearablesList.add("Roupa Teste 19");
-        wearablesList.add("Roupa Teste 20");
-        */
+        for (String wearable: wearableStrings) {
+
+            List<String> wearableData = Arrays.asList(wearable.split("#"));
+
+            Wearable newWearable = new Wearable();
+
+            newWearable.id = wearableData.get(0);
+            newWearable.colors = (wearableData.get(1)).replace("&", ", ");
+            newWearable.type = wearableData.get(2);
+            newWearable.brand = wearableData.get(3);
+            newWearable.description = wearableData.get(4);
+
+            wearablesList.add(newWearable);
+        }
+
+        Log.d("friendshipsStrings", wearableStrings.toString());
 
         Log.d("debugTest", "Finished building");
     }

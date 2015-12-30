@@ -13,8 +13,8 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Wearable"
-        android:id="@+id/bRFID" />
+        android:text="Scan Label"
+        android:id="@+id/bScanLabel" />
 
     <TextView
         android:layout_width="match_parent"

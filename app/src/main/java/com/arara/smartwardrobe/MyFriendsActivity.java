@@ -49,13 +49,11 @@ public class MyFriendsActivity extends AppCompatActivity implements View.OnClick
                 startActivity(intent);
             }
         });
-
-        loadFriendsList();
     }
 
     @Override
-    protected void onPostResume() {
-        super.onPostResume();
+    protected void onResume() {
+        super.onResume();
         loadFriendsList();
     }
 
