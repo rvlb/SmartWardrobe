@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.telecom.Call;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -233,6 +234,71 @@ public class ServerRequest {
 
                 serverResponse.response = response.replace("\"","");
                 serverResponse.response = serverResponse.response.replace("<br />","");
+
+                Log.d("response", serverResponse.response);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return serverResponse;
+        }
+
+        @Override
+        protected void onPostExecute(ServerResponse serverResponse) {
+            progressDialog.dismiss();
+            callback.done(serverResponse);
+            super.onPostExecute(serverResponse);
+        }
+    }
+
+    public void fetchUserWearableDataInBackground(User user, Callback callback) {
+        progressDialog.show();
+        new FetchUserWearableDataAsyncTask(user, callback).execute();
+    }
+
+    public class FetchUserWearableDataAsyncTask extends AsyncTask<Void, Void, ServerResponse> {
+
+        User user;
+        Callback callback;
+
+        public FetchUserWearableDataAsyncTask(User user, Callback callback) {
+            this.user = user;
+            this.callback = callback;
+        }
+
+        @Override
+        protected ServerResponse doInBackground(Void... params) {
+            HashMap<String, String> dataToSend = new HashMap<>();
+            dataToSend.put("tag_owner", user.name);
+            String response = "error";
+            ServerResponse serverResponse = new ServerResponse(null, null, response);
+
+            try {
+                URL url = new URL(SERVER_ADDRESS + "get_user_wearables.php");
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setReadTimeout(CONNECTION_TIMEOUT);
+                con.setConnectTimeout(CONNECTION_TIMEOUT);
+                con.setRequestMethod("POST");
+                con.setDoInput(true);
+                con.setDoOutput(true);
+
+                OutputStream os = con.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                writer.write(Misc.getPostDataString(dataToSend));
+                writer.flush();
+                writer.close();
+                os.close();
+
+                int code = con.getResponseCode();
+                Log.d("code", code + "");
+
+                InputStream responseStream = new BufferedInputStream(con.getInputStream());
+                BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream));
+                response = responseStreamReader.readLine();
+                responseStreamReader.close();
+
+                serverResponse.response = response.replace("\"","");
+                serverResponse.response = serverResponse.response.replace("<br />", "");
 
                 Log.d("response", serverResponse.response);
 

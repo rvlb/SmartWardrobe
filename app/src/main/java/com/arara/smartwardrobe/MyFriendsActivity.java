@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -34,6 +35,27 @@ public class MyFriendsActivity extends AppCompatActivity implements View.OnClick
 
         userLocalStore = new UserLocalStore(this);
 
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, friendsList);
+        Log.d("adapterSize", adapter.getCount() + "");
+        lvFriends = (ListView) findViewById(R.id.lvFriends);
+        lvFriends.setAdapter(adapter);
+        lvFriends.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedFriend = (String) lvFriends.getItemAtPosition(position);
+                //Misc.showAlertMsg("Clicked on " + selectedFriend, "Ok", MyFriendsActivity.this);
+                Intent intent = new Intent(MyFriendsActivity.this, MyWearablesActivity.class);
+                intent.putExtra("owner", selectedFriend);
+                startActivity(intent);
+            }
+        });
+
+        loadFriendsList();
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
         loadFriendsList();
     }
 
@@ -54,26 +76,13 @@ public class MyFriendsActivity extends AppCompatActivity implements View.OnClick
                 Log.d("serverResponseMyFr", serverResponse.response);
                 if(serverResponse.response.equals("error")) {
                     Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", MyFriendsActivity.this);
-                    startActivity(new Intent(MyFriendsActivity.this, MainActivity.class));
+                    finish();
                 } else if(serverResponse.response.equals("no friends")) {
                     Misc.showAlertMsg("No friend found.", "Ok", MyFriendsActivity.this);
+                    finish();
                 } else {
                     buildFriendsList(serverResponse.response);
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(MyFriendsActivity.this,
-                            android.R.layout.simple_list_item_1, friendsList);
-                    Log.d("adapterSize", adapter.getCount() + "");
-                    lvFriends = (ListView) findViewById(R.id.lvFriends);
-                    lvFriends.setAdapter(adapter);
-                    lvFriends.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            String selectedFriend = (String) lvFriends.getItemAtPosition(position);
-                            //Misc.showAlertMsg("Clicked on " + selectedFriend, "Ok", MyFriendsActivity.this);
-                            Intent intent = new Intent(MyFriendsActivity.this, MyWearablesActivity.class);
-                            intent.putExtra("owner", selectedFriend);
-                            startActivity(intent);
-                        }
-                    });
+                    ((BaseAdapter) lvFriends.getAdapter()).notifyDataSetChanged();
                 }
             }
         });
@@ -96,7 +105,9 @@ public class MyFriendsActivity extends AppCompatActivity implements View.OnClick
             String friendName = (friends.get(0).equals(userLocalStore.getLoggedUser().name) ?
                                  friends.get(1) : friends.get(0));
 
-            friendsList.add(friendName);
+            if (!friendsList.contains(friendName)) {
+                friendsList.add(friendName);
+            }
 
             Log.d("friendsList " + friendsList.size(), friendsList.get(friendsList.size() - 1));
         }

@@ -31,10 +31,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
-        /*
-            Disables smartphone's "back" button, making the user able to return to the
-            title screen only by logging off.
-        */
+        logout();
+    }
+
+    private void logout() {
+        userLocalStore.clearUserData();
+        userLocalStore.setUserLogged(false);
+        finish();
     }
 
     @Override
@@ -55,9 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.bLogout:
-                userLocalStore.clearUserData();
-                userLocalStore.setUserLogged(false);
-                startActivity(new Intent(this, LoginActivity.class));
+                logout();
                 break;
         }
     }

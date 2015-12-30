@@ -57,7 +57,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", RegisterActivity.this);
                 } else if(serverResponse.response.equals("success")) {
                     Misc.showAlertMsg("User successfully registered!", "Ok", RegisterActivity.this);
-                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                    finish();
                 }
             }
         });

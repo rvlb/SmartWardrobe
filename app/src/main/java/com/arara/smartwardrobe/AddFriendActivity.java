@@ -60,7 +60,7 @@ public class AddFriendActivity extends AppCompatActivity implements View.OnClick
                     Misc.showAlertMsg("An error occurred.", "Ok", AddFriendActivity.this);
                 } else if(serverResponse.response.equals("success")) {
                     Misc.showAlertMsg("Friendship successfully started!", "Ok", AddFriendActivity.this);
-                    startActivity(new Intent(AddFriendActivity.this, MyFriendsActivity.class));
+                    finish();
                 }
             }
         });

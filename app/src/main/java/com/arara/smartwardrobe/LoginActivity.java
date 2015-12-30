@@ -76,6 +76,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void logUser(User user) {
+        etUsername.setText("");
+        etPassword.setText("");
         userLocalStore.storeUserData(user);
         userLocalStore.setUserLogged(true);
         startActivity(new Intent(this, MainActivity.class));

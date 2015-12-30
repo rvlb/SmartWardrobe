@@ -95,7 +95,7 @@ public class AddWearableActivity extends AppCompatActivity implements View.OnCli
                     Misc.showAlertMsg("An error occurred.", "Ok", AddWearableActivity.this);
                 } else if(serverResponse.response.equals("success")) {
                     Misc.showAlertMsg("Wearable successfully added!", "Ok", AddWearableActivity.this);
-                    startActivity(new Intent(AddWearableActivity.this, RFIDActivity.class));
+                    finish();
                 }
             }
         });
