@@ -7,8 +7,14 @@
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="515dp"
         android:id="@+id/lvWearables">
     </ListView>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Here is the WishList Button"
+        android:id="@+id/bMyWishList" />
 
 </LinearLayout>

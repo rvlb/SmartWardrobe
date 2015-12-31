@@ -8,21 +8,32 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MyWearablesActivity extends AppCompatActivity {
+public class MyWearablesActivity extends AppCompatActivity implements View.OnClickListener {
 
     List<Wearable> wearablesList;
     ListView lvWearables;
+    Button bMyWishList;
+
+    String wearablesOwner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_wearables);
+
+        wearablesOwner = getIntent().getExtras().getString("owner");
+        Log.d("wearablesOwner", wearablesOwner);
+
+        bMyWishList = (Button) findViewById(R.id.bMyWishList);
+        bMyWishList.setText(wearablesOwner + "'s WishList");
+        bMyWishList.setOnClickListener(this);
 
         wearablesList = new ArrayList<>();
 
@@ -48,9 +59,16 @@ public class MyWearablesActivity extends AppCompatActivity {
         loadWearablesList();
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.bMyWishList:
+                //startActivity(new Intent(this, MyWishlistActivity.class));
+                break;
+        }
+    }
+
     private void loadWearablesList() {
-        String wearablesOwner = getIntent().getExtras().getString("owner");
-        Log.d("wearablesOwner", wearablesOwner);
         ServerRequest serverRequest = new ServerRequest(this);
         serverRequest.fetchUserWearableDataInBackground(new User(wearablesOwner), new Callback() {
             @Override
@@ -60,8 +78,8 @@ public class MyWearablesActivity extends AppCompatActivity {
                     Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", MyWearablesActivity.this);
                     finish();
                 } else if (serverResponse.response.equals("no wearables")) {
-                    Misc.showAlertMsg("No wearable found.", "Ok", MyWearablesActivity.this);
-                    finish();
+                    Log.d("no wearable", "No wearable found");
+                    //Misc.showAlertMsg("No wearable found.", "Ok", MyWearablesActivity.this);
                 } else {
                     buildWearablesList(serverResponse.response);
                     ((BaseAdapter) lvWearables.getAdapter()).notifyDataSetChanged();
@@ -91,6 +109,7 @@ public class MyWearablesActivity extends AppCompatActivity {
             newWearable.type = wearableData.get(2);
             newWearable.brand = wearableData.get(3);
             newWearable.description = wearableData.get(4);
+            newWearable.owner = wearablesOwner;
 
             wearablesList.add(newWearable);
         }

@@ -4,14 +4,15 @@ import java.io.Serializable;
 
 public class Wearable implements Serializable {
 
-    String id, colors, type, brand, description;
+    String id, colors, type, brand, description, owner;
 
-    public Wearable(String id, String colors, String type, String brand, String description) {
+    public Wearable(String id, String colors, String type, String brand, String description, String owner) {
         this.id = id;
         this.colors = colors;
         this.type = type;
         this.brand = brand;
         this.description = description;
+        this.owner = owner;
     }
 
     public Wearable(String colors, String type, String brand, String description) {
@@ -20,6 +21,7 @@ public class Wearable implements Serializable {
         this.type = type;
         this.brand = brand;
         this.description = description;
+        this.owner = "";
     }
 
     public Wearable() {
@@ -28,6 +30,7 @@ public class Wearable implements Serializable {
         this.type = "";
         this.brand = "";
         this.description = "";
+        this.owner = "";
     }
 
     @Override

@@ -3,55 +3,75 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="50dp">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:layout_marginTop="50dp"
-        android:text="WEARABLE TYPE"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="515dp"
+        android:padding="50dp">
 
-    <TextView
-        android:text="Here is the type"
+        <TextView
+            android:text="Here is the owner's name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:id="@+id/tvOwner"/>
+
+        <TextView
+            android:layout_marginTop="50dp"
+            android:text="WEARABLE TYPE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="Here is the type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvType"/>
+
+        <TextView
+            android:layout_marginTop="50dp"
+            android:text="WEARABLE BRAND"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="Here is the brand"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvBrand"/>
+
+        <TextView
+            android:layout_marginTop="50dp"
+            android:text="WEARABLE COLORS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="Here are the colors"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvColors"/>
+
+        <TextView
+            android:layout_marginTop="50dp"
+            android:text="WEARABLE DESCRIPTION"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvDescription"/>
+
+    </LinearLayout>
+
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tvType"/>
-
-    <TextView
-        android:layout_marginTop="50dp"
-        android:text="WEARABLE BRAND"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:text="Here is the brand"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvBrand"/>
-
-    <TextView
-        android:layout_marginTop="50dp"
-        android:text="WEARABLE COLORS"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:text="Here are the colors"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvColors"/>
-
-    <TextView
-        android:layout_marginTop="50dp"
-        android:text="WEARABLE DESCRIPTION"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvDescription"/>
+        android:text="Add To My WishList"
+        android:id="@+id/bAddToMyWishList" />
 
 </LinearLayout>
