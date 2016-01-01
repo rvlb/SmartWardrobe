@@ -35,17 +35,17 @@ public class ScanLabelActivity extends AppCompatActivity {
         ServerRequest serverRequest = new ServerRequest(this);
         serverRequest.fetchTagDataInBackground(formattedTag, new Callback() {
             @Override
-            public void done(ServerResponse serverResponse) {
-                Log.d("serverResponseTag", serverResponse.response);
-                if (serverResponse.response.equals("error")) {
+            public void done(String serverResponse) {
+                Log.d("serverResponseTag", serverResponse);
+                if (serverResponse.equals("error")) {
                     Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", ScanLabelActivity.this);
                     finish();
-                } else if (serverResponse.response.equals("no tag")) {
+                } else if (serverResponse.equals("no tag")) {
                     Misc.showAlertMsg("Tag not found.", "Ok", ScanLabelActivity.this);
                     //Registrar tag
                 } else {
                     Intent intent = new Intent(ScanLabelActivity.this, ViewWearableActivity.class);
-                    intent.putExtra("selectedWearable", buildWearable(serverResponse.response));
+                    intent.putExtra("selectedWearable", buildWearable(serverResponse));
                     startActivity(intent);
                 }
             }

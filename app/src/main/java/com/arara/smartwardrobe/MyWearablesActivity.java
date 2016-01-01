@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +22,8 @@ public class MyWearablesActivity extends AppCompatActivity implements View.OnCli
     ListView lvWearables;
     Button bMyWishList;
 
+    TextView tvWearablesOwnerName;
+
     String wearablesOwner;
 
     @Override
@@ -30,6 +33,9 @@ public class MyWearablesActivity extends AppCompatActivity implements View.OnCli
 
         wearablesOwner = getIntent().getExtras().getString("owner");
         Log.d("wearablesOwner", wearablesOwner);
+
+        tvWearablesOwnerName = (TextView) findViewById(R.id.tvWearablesOwnerName);
+        tvWearablesOwnerName.setText((wearablesOwner + "'s wearables").toUpperCase());
 
         bMyWishList = (Button) findViewById(R.id.bMyWishList);
         bMyWishList.setText(wearablesOwner + "'s WishList");
@@ -72,16 +78,16 @@ public class MyWearablesActivity extends AppCompatActivity implements View.OnCli
         ServerRequest serverRequest = new ServerRequest(this);
         serverRequest.fetchUserWearableDataInBackground(new User(wearablesOwner), new Callback() {
             @Override
-            public void done(ServerResponse serverResponse) {
-                Log.d("serverResponseMyW", serverResponse.response);
-                if (serverResponse.response.equals("error")) {
+            public void done(String serverResponse) {
+                Log.d("serverResponseMyW", serverResponse);
+                if (serverResponse.equals("error")) {
                     Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", MyWearablesActivity.this);
                     finish();
-                } else if (serverResponse.response.equals("no wearables")) {
+                } else if (serverResponse.equals("no wearables")) {
                     Log.d("no wearable", "No wearable found");
                     //Misc.showAlertMsg("No wearable found.", "Ok", MyWearablesActivity.this);
                 } else {
-                    buildWearablesList(serverResponse.response);
+                    buildWearablesList(serverResponse);
                     ((BaseAdapter) lvWearables.getAdapter()).notifyDataSetChanged();
                 }
             }

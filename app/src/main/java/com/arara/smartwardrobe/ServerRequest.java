@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.telecom.Call;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -36,7 +35,7 @@ public class ServerRequest {
         new FetchUserDataAsyncTask(user, callback).execute();
     }
 
-    public class FetchUserDataAsyncTask extends AsyncTask<Void, Void, ServerResponse> {
+    public class FetchUserDataAsyncTask extends AsyncTask<Void, Void, String> {
 
         User user;
         Callback callback;
@@ -47,12 +46,11 @@ public class ServerRequest {
         }
 
         @Override
-        protected ServerResponse doInBackground(Void... params) {
+        protected String doInBackground(Void... params) {
             HashMap<String, String> dataToSend = new HashMap<>();
             dataToSend.put("name", user.name);
             dataToSend.put("password", user.password);
-            String response = "error";
-            ServerResponse serverResponse = new ServerResponse(null, null, response);
+            String serverResponse = "error";
 
             try {
                 URL url = new URL(SERVER_ADDRESS + "login_user.php");
@@ -75,15 +73,12 @@ public class ServerRequest {
 
                 InputStream responseStream = new BufferedInputStream(con.getInputStream());
                 BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream));
-                response = responseStreamReader.readLine();
+                serverResponse = responseStreamReader.readLine();
                 responseStreamReader.close();
 
-                serverResponse.returnedUser = user;
-                serverResponse.response = response.replace("\"","");
-                serverResponse.response = serverResponse.response.replace("<br />","");
+                serverResponse = Misc.getFormattedServerResponse(serverResponse);
 
-                Log.d("user", serverResponse.returnedUser.name);
-                Log.d("response", serverResponse.response);
+                Log.d("response", serverResponse);
 
             } catch(Exception e) {
                 e.printStackTrace();
@@ -92,7 +87,7 @@ public class ServerRequest {
         }
 
         @Override
-        protected void onPostExecute(ServerResponse serverResponse) {
+        protected void onPostExecute(String serverResponse) {
             progressDialog.dismiss();
             callback.done(serverResponse);
             super.onPostExecute(serverResponse);
@@ -104,7 +99,7 @@ public class ServerRequest {
         new StoreUserDataAsyncTask(user, callback).execute();
     }
 
-    public class StoreUserDataAsyncTask extends AsyncTask<Void, Void, ServerResponse> {
+    public class StoreUserDataAsyncTask extends AsyncTask<Void, Void, String> {
 
         User user;
         Callback callback;
@@ -115,10 +110,9 @@ public class ServerRequest {
         }
 
         @Override
-        protected ServerResponse doInBackground(Void... params) {
+        protected String doInBackground(Void... params) {
 
-            String response = "error";
-            ServerResponse serverResponse = new ServerResponse(null, null, response);
+            String serverResponse = "error";
 
             try {
                 URL url = new URL(SERVER_ADDRESS + "register_user.php");
@@ -152,13 +146,12 @@ public class ServerRequest {
 
                 InputStream responseStream = new BufferedInputStream(con.getInputStream());
                 BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream));
-                response = responseStreamReader.readLine();
+                serverResponse = responseStreamReader.readLine();
                 responseStreamReader.close();
 
-                serverResponse.response = response.replace("\"","");
-                serverResponse.response = serverResponse.response.replace("<br />","");
+                serverResponse = Misc.getFormattedServerResponse(serverResponse);
 
-                Log.d("response", serverResponse.response);
+                Log.d("response", serverResponse);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -167,7 +160,7 @@ public class ServerRequest {
         }
 
         @Override
-        protected void onPostExecute(ServerResponse serverResponse) {
+        protected void onPostExecute(String serverResponse) {
             progressDialog.dismiss();
             callback.done(serverResponse);
             super.onPostExecute(serverResponse);
@@ -179,7 +172,7 @@ public class ServerRequest {
         new StoreWearableDataAsyncTask(wearable, callback).execute();
     }
 
-    public class StoreWearableDataAsyncTask extends AsyncTask<Void, Void, ServerResponse> {
+    public class StoreWearableDataAsyncTask extends AsyncTask<Void, Void, String> {
 
         Wearable wearable;
         Callback callback;
@@ -190,10 +183,9 @@ public class ServerRequest {
         }
 
         @Override
-        protected ServerResponse doInBackground(Void... params) {
+        protected String doInBackground(Void... params) {
 
-            String response = "error";
-            ServerResponse serverResponse = new ServerResponse(null, null, response);
+            String serverResponse = "error";
 
             try {
                 URL url = new URL(SERVER_ADDRESS + "insert_wearable.php");
@@ -229,13 +221,12 @@ public class ServerRequest {
 
                 InputStream responseStream = new BufferedInputStream(con.getInputStream());
                 BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream));
-                response = responseStreamReader.readLine();
+                serverResponse = responseStreamReader.readLine();
                 responseStreamReader.close();
 
-                serverResponse.response = response.replace("\"","");
-                serverResponse.response = serverResponse.response.replace("<br />","");
+                serverResponse = Misc.getFormattedServerResponse(serverResponse);
 
-                Log.d("response", serverResponse.response);
+                Log.d("response", serverResponse);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -244,7 +235,7 @@ public class ServerRequest {
         }
 
         @Override
-        protected void onPostExecute(ServerResponse serverResponse) {
+        protected void onPostExecute(String serverResponse) {
             progressDialog.dismiss();
             callback.done(serverResponse);
             super.onPostExecute(serverResponse);
@@ -256,7 +247,7 @@ public class ServerRequest {
         new FetchUserWearableDataAsyncTask(user, callback).execute();
     }
 
-    public class FetchUserWearableDataAsyncTask extends AsyncTask<Void, Void, ServerResponse> {
+    public class FetchUserWearableDataAsyncTask extends AsyncTask<Void, Void, String> {
 
         User user;
         Callback callback;
@@ -267,11 +258,10 @@ public class ServerRequest {
         }
 
         @Override
-        protected ServerResponse doInBackground(Void... params) {
+        protected String doInBackground(Void... params) {
             HashMap<String, String> dataToSend = new HashMap<>();
             dataToSend.put("tag_owner", user.name);
-            String response = "error";
-            ServerResponse serverResponse = new ServerResponse(null, null, response);
+            String serverResponse = "error";
 
             try {
                 URL url = new URL(SERVER_ADDRESS + "get_user_wearables.php");
@@ -294,13 +284,12 @@ public class ServerRequest {
 
                 InputStream responseStream = new BufferedInputStream(con.getInputStream());
                 BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream));
-                response = responseStreamReader.readLine();
+                serverResponse = responseStreamReader.readLine();
                 responseStreamReader.close();
 
-                serverResponse.response = response.replace("\"","");
-                serverResponse.response = serverResponse.response.replace("<br />", "");
+                serverResponse = Misc.getFormattedServerResponse(serverResponse);
 
-                Log.d("response", serverResponse.response);
+                Log.d("response", serverResponse);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -309,7 +298,7 @@ public class ServerRequest {
         }
 
         @Override
-        protected void onPostExecute(ServerResponse serverResponse) {
+        protected void onPostExecute(String serverResponse) {
             progressDialog.dismiss();
             callback.done(serverResponse);
             super.onPostExecute(serverResponse);
@@ -321,7 +310,7 @@ public class ServerRequest {
         new FetchTagDataAsyncTask(tag, callback).execute();
     }
 
-    public class FetchTagDataAsyncTask extends AsyncTask<Void, Void, ServerResponse> {
+    public class FetchTagDataAsyncTask extends AsyncTask<Void, Void, String> {
 
         String tag;
         Callback callback;
@@ -332,11 +321,10 @@ public class ServerRequest {
         }
 
         @Override
-        protected ServerResponse doInBackground(Void... params) {
+        protected String doInBackground(Void... params) {
             HashMap<String, String> dataToSend = new HashMap<>();
             dataToSend.put("tag_id", tag);
-            String response = "error";
-            ServerResponse serverResponse = new ServerResponse(null, null, response);
+            String serverResponse = "error";
 
             try {
                 URL url = new URL(SERVER_ADDRESS + "get_tag_wearable.php");
@@ -359,13 +347,12 @@ public class ServerRequest {
 
                 InputStream responseStream = new BufferedInputStream(con.getInputStream());
                 BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream));
-                response = responseStreamReader.readLine();
+                serverResponse = responseStreamReader.readLine();
                 responseStreamReader.close();
 
-                serverResponse.response = response.replace("\"","");
-                serverResponse.response = serverResponse.response.replace("<br />", "");
+                serverResponse = Misc.getFormattedServerResponse(serverResponse);
 
-                Log.d("response", serverResponse.response);
+                Log.d("response", serverResponse);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -374,7 +361,7 @@ public class ServerRequest {
         }
 
         @Override
-        protected void onPostExecute(ServerResponse serverResponse) {
+        protected void onPostExecute(String serverResponse) {
             progressDialog.dismiss();
             callback.done(serverResponse);
             super.onPostExecute(serverResponse);
@@ -386,7 +373,7 @@ public class ServerRequest {
         new FetchFriendshipDataAsyncTask(user, callback).execute();
     }
 
-    public class FetchFriendshipDataAsyncTask extends AsyncTask<Void, Void, ServerResponse> {
+    public class FetchFriendshipDataAsyncTask extends AsyncTask<Void, Void, String> {
 
         User user;
         Callback callback;
@@ -397,11 +384,10 @@ public class ServerRequest {
         }
 
         @Override
-        protected ServerResponse doInBackground(Void... params) {
+        protected String doInBackground(Void... params) {
             HashMap<String, String> dataToSend = new HashMap<>();
             dataToSend.put("name", user.name);
-            String response = "error";
-            ServerResponse serverResponse = new ServerResponse(null, null, response);
+            String serverResponse = "error";
 
             try {
                 URL url = new URL(SERVER_ADDRESS + "get_user_friends.php");
@@ -424,13 +410,12 @@ public class ServerRequest {
 
                 InputStream responseStream = new BufferedInputStream(con.getInputStream());
                 BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream));
-                response = responseStreamReader.readLine();
+                serverResponse = responseStreamReader.readLine();
                 responseStreamReader.close();
 
-                serverResponse.response = response.replace("\"","");
-                serverResponse.response = serverResponse.response.replace("<br />", "");
+                serverResponse = Misc.getFormattedServerResponse(serverResponse);
 
-                Log.d("response", serverResponse.response);
+                Log.d("response", serverResponse);
 
             } catch(Exception e) {
                 e.printStackTrace();
@@ -440,7 +425,7 @@ public class ServerRequest {
         }
 
         @Override
-        protected void onPostExecute(ServerResponse serverResponse) {
+        protected void onPostExecute(String serverResponse) {
             progressDialog.dismiss();
             callback.done(serverResponse);
             super.onPostExecute(serverResponse);
@@ -452,7 +437,7 @@ public class ServerRequest {
         new StoreFriendshipDataAsyncTask(friendship, callback).execute();
     }
 
-    public class StoreFriendshipDataAsyncTask extends AsyncTask<Void, Void, ServerResponse> {
+    public class StoreFriendshipDataAsyncTask extends AsyncTask<Void, Void, String> {
 
         Friendship friendship;
         Callback callback;
@@ -463,10 +448,9 @@ public class ServerRequest {
         }
 
         @Override
-        protected ServerResponse doInBackground(Void... params) {
+        protected String doInBackground(Void... params) {
 
-            String response = "error";
-            ServerResponse serverResponse = new ServerResponse(null, null, response);
+            String serverResponse = "error";
 
             try {
                 URL url = new URL(SERVER_ADDRESS + "insert_friendship.php");
@@ -498,13 +482,12 @@ public class ServerRequest {
 
                 InputStream responseStream = new BufferedInputStream(con.getInputStream());
                 BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream));
-                response = responseStreamReader.readLine();
+                serverResponse = responseStreamReader.readLine();
                 responseStreamReader.close();
 
-                serverResponse.response = response.replace("\"","");
-                serverResponse.response = serverResponse.response.replace("<br />","");
+                serverResponse = Misc.getFormattedServerResponse(serverResponse);
 
-                Log.d("response", serverResponse.response);
+                Log.d("response", serverResponse);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -514,7 +497,7 @@ public class ServerRequest {
         }
 
         @Override
-        protected void onPostExecute(ServerResponse serverResponse) {
+        protected void onPostExecute(String serverResponse) {
             progressDialog.dismiss();
             callback.done(serverResponse);
             super.onPostExecute(serverResponse);

@@ -17,6 +17,10 @@ public class Misc {
         dialogBuilder.show();
     }
 
+    public static String getFormattedServerResponse(String response) {
+        return (response.replace("\"","")).replace("<br />","");
+    }
+
     public static String getPostDataString(HashMap<String, String> data) throws UnsupportedEncodingException {
         StringBuilder sb = new StringBuilder();
         boolean first = true;

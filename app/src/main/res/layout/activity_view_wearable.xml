@@ -20,7 +20,7 @@
 
         <TextView
             android:layout_marginTop="50dp"
-            android:text="WEARABLE TYPE"
+            android:text="TYPE"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -32,7 +32,7 @@
 
         <TextView
             android:layout_marginTop="50dp"
-            android:text="WEARABLE BRAND"
+            android:text="BRAND"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -44,7 +44,7 @@
 
         <TextView
             android:layout_marginTop="50dp"
-            android:text="WEARABLE COLORS"
+            android:text="COLORS"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -56,7 +56,7 @@
 
         <TextView
             android:layout_marginTop="50dp"
-            android:text="WEARABLE DESCRIPTION"
+            android:text="DESCRIPTION"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

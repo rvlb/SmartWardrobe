@@ -43,19 +43,19 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         ServerRequest serverRequest = new ServerRequest(this);
         serverRequest.storeUserDataInBackground(user, new Callback() {
             @Override
-            public void done(ServerResponse serverResponse) {
-                Log.d("serverResponseReg", serverResponse.response);
-                if(serverResponse.response.equals("blank fields")) {
+            public void done(String serverResponse) {
+                Log.d("serverResponseReg", serverResponse);
+                if(serverResponse.equals("blank fields")) {
                     Misc.showAlertMsg("Please fill all the fields.", "Ok", RegisterActivity.this);
-                } else if(serverResponse.response.equals("user exists")) {
+                } else if(serverResponse.equals("user exists")) {
                     Misc.showAlertMsg("User already exists.", "Ok", RegisterActivity.this);
-                } else if(serverResponse.response.equals("failure")) {
+                } else if(serverResponse.equals("failure")) {
                     Misc.showAlertMsg("An error occurred.", "Ok", RegisterActivity.this);
-                } else if(serverResponse.response.equals("different passwords")) {
+                } else if(serverResponse.equals("different passwords")) {
                     Misc.showAlertMsg("Passwords don't match.", "Ok", RegisterActivity.this);
-                } else if(serverResponse.response.equals("error")) {
+                } else if(serverResponse.equals("error")) {
                     Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", RegisterActivity.this);
-                } else if(serverResponse.response.equals("success")) {
+                } else if(serverResponse.equals("success")) {
                     Misc.showAlertMsg("User successfully registered!", "Ok", RegisterActivity.this);
                     finish();
                 }

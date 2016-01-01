@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,17 +24,22 @@ public class MyFriendsActivity extends AppCompatActivity implements View.OnClick
     List<String> friendsList;
     ListView lvFriends;
 
+    TextView tvFriendListName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_friends);
 
+        userLocalStore = new UserLocalStore(this);
+
         friendsList = new ArrayList<>();
+
+        tvFriendListName = (TextView) findViewById(R.id.tvFriendListName);
+        tvFriendListName.setText((userLocalStore.getLoggedUser().name + "'s friends").toUpperCase());
 
         bAddFriend = (Button) findViewById(R.id.bAddFriend);
         bAddFriend.setOnClickListener(this);
-
-        userLocalStore = new UserLocalStore(this);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, friendsList);
         Log.d("adapterSize", adapter.getCount() + "");
@@ -70,16 +76,16 @@ public class MyFriendsActivity extends AppCompatActivity implements View.OnClick
         ServerRequest serverRequest = new ServerRequest(this);
         serverRequest.fetchFriendshipDataInBackground(userLocalStore.getLoggedUser(), new Callback() {
             @Override
-            public void done(ServerResponse serverResponse) {
-                Log.d("serverResponseMyFr", serverResponse.response);
-                if(serverResponse.response.equals("error")) {
+            public void done(String serverResponse) {
+                Log.d("serverResponseMyFr", serverResponse);
+                if(serverResponse.equals("error")) {
                     Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", MyFriendsActivity.this);
                     finish();
-                } else if(serverResponse.response.equals("no friends")) {
-                    Misc.showAlertMsg("No friend found.", "Ok", MyFriendsActivity.this);
-                    finish();
+                } else if(serverResponse.equals("no friends")) {
+                    Log.d("no friend", "No friend found");
+                    //Misc.showAlertMsg("No friend found.", "Ok", MyFriendsActivity.this);
                 } else {
-                    buildFriendsList(serverResponse.response);
+                    buildFriendsList(serverResponse);
                     ((BaseAdapter) lvFriends.getAdapter()).notifyDataSetChanged();
                 }
             }

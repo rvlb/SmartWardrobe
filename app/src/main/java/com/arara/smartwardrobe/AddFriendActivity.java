@@ -44,21 +44,21 @@ public class AddFriendActivity extends AppCompatActivity implements View.OnClick
         ServerRequest serverRequest = new ServerRequest(this);
         serverRequest.storeFriendshipDataInBackground(friendship, new Callback() {
             @Override
-            public void done(ServerResponse serverResponse) {
-                Log.d("serverResponseAddF", serverResponse.response);
-                if(serverResponse.response.equals("blank fields")) {
+            public void done(String serverResponse) {
+                Log.d("serverResponseAddF", serverResponse);
+                if(serverResponse.equals("blank fields")) {
                     Misc.showAlertMsg("Please fill all the fields.", "Ok", AddFriendActivity.this);
-                } else if(serverResponse.response.equals("same user")) {
+                } else if(serverResponse.equals("same user")) {
                     Misc.showAlertMsg("Please choose a user that isn't you.", "Ok", AddFriendActivity.this);
-                } else if(serverResponse.response.equals("friendship exists")) {
+                } else if(serverResponse.equals("friendship exists")) {
                     Misc.showAlertMsg("Friendship already exists.", "Ok", AddFriendActivity.this);
-                } else if(serverResponse.response.equals("invalid user")) {
+                } else if(serverResponse.equals("invalid user")) {
                     Misc.showAlertMsg("Invalid user.", "Ok", AddFriendActivity.this);
-                } else if(serverResponse.response.equals("error")) {
+                } else if(serverResponse.equals("error")) {
                     Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", AddFriendActivity.this);
-                } else if(serverResponse.response.equals("failure")) {
+                } else if(serverResponse.equals("failure")) {
                     Misc.showAlertMsg("An error occurred.", "Ok", AddFriendActivity.this);
-                } else if(serverResponse.response.equals("success")) {
+                } else if(serverResponse.equals("success")) {
                     Misc.showAlertMsg("Friendship successfully started!", "Ok", AddFriendActivity.this);
                     finish();
                 }

@@ -46,21 +46,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private void authenticate(User user) {
+    private void authenticate(final User user) {
         ServerRequest serverRequest = new ServerRequest(this);
         serverRequest.fetchUserDataInBackground(user, new Callback() {
             @Override
-            public void done(ServerResponse serverResponse) {
-                if(serverResponse.response.equals("error")) {
+            public void done(String serverResponse) {
+                if(serverResponse.equals("error")) {
                     Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", LoginActivity.this);
-                } else if(serverResponse.response.equals("blank fields")) {
+                } else if(serverResponse.equals("blank fields")) {
                     Misc.showAlertMsg("Please fill all the fields.", "Ok", LoginActivity.this);
-                } else if(serverResponse.response.equals("invalid user")) {
+                } else if(serverResponse.equals("invalid user")) {
                     Misc.showAlertMsg("Invalid user.", "Ok", LoginActivity.this);
-                } else if(serverResponse.response.equals("wrong password")) {
+                } else if(serverResponse.equals("wrong password")) {
                     Misc.showAlertMsg("Wrong password.", "Ok", LoginActivity.this);
-                } else if(serverResponse.response.equals("success") && serverResponse.returnedUser != null) {
-                    logUser(serverResponse.returnedUser);
+                } else if(serverResponse.equals("success")) {
+                    logUser(user);
                 }
             }
         });

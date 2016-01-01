@@ -81,19 +81,19 @@ public class AddWearableActivity extends AppCompatActivity implements View.OnCli
         ServerRequest serverRequest = new ServerRequest(this);
         serverRequest.storeWearableDataInBackground(wearable, new Callback() {
             @Override
-            public void done(ServerResponse serverResponse) {
-                Log.d("serverResponseAddW", serverResponse.response);
-                if(serverResponse.response.equals("blank fields")) {
+            public void done(String serverResponse) {
+                Log.d("serverResponseAddW", serverResponse);
+                if(serverResponse.equals("blank fields")) {
                     Misc.showAlertMsg("Please fill all the fields.", "Ok", AddWearableActivity.this);
-                } else if(serverResponse.response.equals("wearable exists")) {
+                } else if(serverResponse.equals("wearable exists")) {
                     Misc.showAlertMsg("Wearable already exists.", "Ok", AddWearableActivity.this);
-                } else if(serverResponse.response.equals("full table")) {
+                } else if(serverResponse.equals("full table")) {
                     Misc.showAlertMsg("Full table.", "Ok", AddWearableActivity.this);
-                } else if(serverResponse.response.equals("error")) {
+                } else if(serverResponse.equals("error")) {
                     Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", AddWearableActivity.this);
-                } else if(serverResponse.response.equals("failure")) {
+                } else if(serverResponse.equals("failure")) {
                     Misc.showAlertMsg("An error occurred.", "Ok", AddWearableActivity.this);
-                } else if(serverResponse.response.equals("success")) {
+                } else if(serverResponse.equals("success")) {
                     Misc.showAlertMsg("Wearable successfully added!", "Ok", AddWearableActivity.this);
                     finish();
                 }
