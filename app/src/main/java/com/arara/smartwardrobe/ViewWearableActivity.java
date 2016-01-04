@@ -1,6 +1,5 @@
 package com.arara.smartwardrobe;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +14,7 @@ public class ViewWearableActivity extends AppCompatActivity implements View.OnCl
     Button bAddToMyWishList;
 
     UserLocalStore userLocalStore;
+    Wearable selectedWearable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +26,7 @@ public class ViewWearableActivity extends AppCompatActivity implements View.OnCl
         bAddToMyWishList = (Button) findViewById(R.id.bAddToMyWishList);
         bAddToMyWishList.setOnClickListener(this);
 
-        Wearable selectedWearable = (Wearable) getIntent().getSerializableExtra("selectedWearable");
+        selectedWearable = (Wearable) getIntent().getSerializableExtra("selectedWearable");
 
         tvOwner = (TextView) findViewById(R.id.tvOwner);
         tvType = (TextView) findViewById(R.id.tvType);
@@ -52,8 +52,28 @@ public class ViewWearableActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bAddToMyWishList:
-                //Adicionar na wishlist
+                addToWishList();
                 break;
         }
+    }
+
+    private void addToWishList() {
+        final ServerRequest serverRequest = new ServerRequest(this);
+        serverRequest.storeWishListDataInBackground(userLocalStore.getLoggedUser(), selectedWearable, new Callback() {
+            @Override
+            public void done(String serverResponse) {
+                Log.d("serverResponseVW", serverResponse);
+                if (serverResponse.equals("error")) {
+                    Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", ViewWearableActivity.this);
+                    finish();
+                } else if(serverResponse.equals("wishlist entry exists")) {
+                    Misc.showAlertMsg("This wearable is already in.", "Ok", ViewWearableActivity.this);
+                } else if(serverResponse.equals("failure")) {
+                    Misc.showAlertMsg("An error occurred.", "Ok", ViewWearableActivity.this);
+                } else if(serverResponse.equals("success")) {
+                    Misc.showAlertMsg("Wearable successfully added to your WishList!", "Ok", ViewWearableActivity.this);
+                }
+            }
+        });
     }
 }

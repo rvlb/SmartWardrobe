@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.telecom.Call;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -22,7 +21,7 @@ public class ServerRequest {
 
     ProgressDialog progressDialog;
     public static final int CONNECTION_TIMEOUT = 1000 * 15;
-    public static final String SERVER_ADDRESS = "http://192.168.25.85/~Renato/";
+    public static final String SERVER_ADDRESS = "SERVER_ADDRESS";
 
     public ServerRequest(Context context) {
         progressDialog = new ProgressDialog(context);
@@ -597,6 +596,7 @@ public class ServerRequest {
 
         @Override
         protected String doInBackground(Void... params) {
+
             String serverResponse = "error";
 
             try {
@@ -627,6 +627,142 @@ public class ServerRequest {
                 e.printStackTrace();
             }
 
+            return serverResponse;
+        }
+
+        @Override
+        protected void onPostExecute(String serverResponse) {
+            progressDialog.dismiss();
+            callback.done(serverResponse);
+            super.onPostExecute(serverResponse);
+        }
+    }
+
+    public void storeWishListDataInBackground(User user, Wearable wearable, Callback callback) {
+        progressDialog.show();
+        new StoreWishListDataAsyncTask(user, wearable, callback).execute();
+    }
+
+    public class StoreWishListDataAsyncTask extends AsyncTask<Void, Void, String> {
+
+        User user;
+        Wearable wearable;
+        Callback callback;
+
+        public StoreWishListDataAsyncTask(User user, Wearable wearable, Callback callback) {
+            this.user = user;
+            this.wearable = wearable;
+            this.callback = callback;
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+
+            String serverResponse = "error";
+
+            try {
+                URL url = new URL(SERVER_ADDRESS + "insert_wishlist.php");
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setReadTimeout(CONNECTION_TIMEOUT);
+                con.setConnectTimeout(CONNECTION_TIMEOUT);
+                con.setRequestMethod("POST");
+                con.setDoInput(true);
+                con.setDoOutput(true);
+
+                Log.d("user_name", user.name);
+                Log.d("wearable_id", wearable.id);
+
+                Uri.Builder builder = new Uri.Builder();
+                builder.appendQueryParameter("user_name", user.name);
+                builder.appendQueryParameter("wearable_id", wearable.id);
+                String query = builder.build().getEncodedQuery();
+                Log.d("query",query);
+
+                OutputStream os = con.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                writer.write(query);
+                writer.flush();
+                writer.close();
+                os.close();
+
+                int code = con.getResponseCode();
+                Log.d("code", code + "");
+
+                InputStream responseStream = new BufferedInputStream(con.getInputStream());
+                BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream));
+                serverResponse = responseStreamReader.readLine();
+                responseStreamReader.close();
+
+                serverResponse = Misc.getFormattedServerResponse(serverResponse);
+
+                Log.d("response", serverResponse);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return serverResponse;
+        }
+
+        @Override
+        protected void onPostExecute(String serverResponse) {
+            progressDialog.dismiss();
+            callback.done(serverResponse);
+            super.onPostExecute(serverResponse);
+        }
+    }
+
+    public void fetchWishListDataInBackground(User user, Callback callback) {
+        progressDialog.show();
+        new FetchWishListDataAsyncTask(user, callback).execute();
+    }
+
+    public class FetchWishListDataAsyncTask extends AsyncTask<Void, Void, String> {
+
+        User user;
+        Callback callback;
+
+        public FetchWishListDataAsyncTask(User user, Callback callback) {
+            this.user = user;
+            this.callback = callback;
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            HashMap<String, String> dataToSend = new HashMap<>();
+            dataToSend.put("user_name", user.name);
+            String serverResponse = "error";
+
+            try {
+                URL url = new URL(SERVER_ADDRESS + "get_user_wishlist.php");
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setReadTimeout(CONNECTION_TIMEOUT);
+                con.setConnectTimeout(CONNECTION_TIMEOUT);
+                con.setRequestMethod("POST");
+                con.setDoInput(true);
+                con.setDoOutput(true);
+
+                OutputStream os = con.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                writer.write(Misc.getPostDataString(dataToSend));
+                writer.flush();
+                writer.close();
+                os.close();
+
+                int code = con.getResponseCode();
+                Log.d("code", code + "");
+
+                InputStream responseStream = new BufferedInputStream(con.getInputStream());
+                BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream));
+                serverResponse = responseStreamReader.readLine();
+                responseStreamReader.close();
+
+                serverResponse = Misc.getFormattedServerResponse(serverResponse);
+
+                Log.d("response", serverResponse);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return serverResponse;
         }
 

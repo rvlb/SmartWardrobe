@@ -69,7 +69,9 @@ public class MyWearablesActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bMyWishList:
-                //startActivity(new Intent(this, MyWishlistActivity.class));
+                Intent intent = new Intent(this, MyWishListActivity.class);
+                intent.putExtra("wearablesOwner", wearablesOwner);
+                startActivity(intent);
                 break;
         }
     }
