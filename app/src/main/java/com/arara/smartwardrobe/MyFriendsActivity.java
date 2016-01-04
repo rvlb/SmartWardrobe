@@ -42,7 +42,7 @@ public class MyFriendsActivity extends AppCompatActivity implements View.OnClick
         bAddFriend.setOnClickListener(this);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, friendsList);
-        Log.d("adapterSize", adapter.getCount() + "");
+
         lvFriends = (ListView) findViewById(R.id.lvFriends);
         lvFriends.setAdapter(adapter);
         lvFriends.setOnItemClickListener(new AdapterView.OnItemClickListener() {

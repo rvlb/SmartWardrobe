@@ -91,6 +91,7 @@ public class AddWearableActivity extends AppCompatActivity implements View.OnCli
                     Misc.showAlertMsg("Full table.", "Ok", AddWearableActivity.this);
                 } else if(serverResponse.equals("error")) {
                     Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", AddWearableActivity.this);
+                    finish();
                 } else if(serverResponse.equals("failure")) {
                     Misc.showAlertMsg("An error occurred.", "Ok", AddWearableActivity.this);
                 } else if(serverResponse.equals("success")) {

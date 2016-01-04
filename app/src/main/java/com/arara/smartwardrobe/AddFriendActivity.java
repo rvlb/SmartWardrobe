@@ -56,6 +56,7 @@ public class AddFriendActivity extends AppCompatActivity implements View.OnClick
                     Misc.showAlertMsg("Invalid user.", "Ok", AddFriendActivity.this);
                 } else if(serverResponse.equals("error")) {
                     Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", AddFriendActivity.this);
+                    finish();
                 } else if(serverResponse.equals("failure")) {
                     Misc.showAlertMsg("An error occurred.", "Ok", AddFriendActivity.this);
                 } else if(serverResponse.equals("success")) {

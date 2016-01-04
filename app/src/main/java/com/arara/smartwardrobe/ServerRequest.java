@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.telecom.Call;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -368,6 +369,83 @@ public class ServerRequest {
         }
     }
 
+    public void storeTagDataInBackground(String tag, User user, Wearable wearable, Callback callback) {
+        progressDialog.show();
+        new StoreTagDataAsyncTask(tag, user, wearable, callback).execute();
+    }
+
+    public class StoreTagDataAsyncTask extends AsyncTask<Void, Void, String> {
+
+        String tag;
+        User user;
+        Wearable wearable;
+        Callback callback;
+
+        public StoreTagDataAsyncTask(String tag, User user, Wearable wearable, Callback callback) {
+            this.tag = tag;
+            this.user = user;
+            this.wearable = wearable;
+            this.callback = callback;
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+
+            String serverResponse = "error";
+
+            try {
+                URL url = new URL(SERVER_ADDRESS + "insert_tag.php");
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setReadTimeout(CONNECTION_TIMEOUT);
+                con.setConnectTimeout(CONNECTION_TIMEOUT);
+                con.setRequestMethod("POST");
+                con.setDoInput(true);
+                con.setDoOutput(true);
+
+                Log.d("tag_id", tag);
+                Log.d("wearable_id", wearable.id);
+                Log.d("tag_owner", user.name);
+
+                Uri.Builder builder = new Uri.Builder();
+                builder.appendQueryParameter("tag_id", tag);
+                builder.appendQueryParameter("wearable_id", wearable.id);
+                builder.appendQueryParameter("tag_owner", user.name);
+                String query = builder.build().getEncodedQuery();
+                Log.d("query",query);
+
+                OutputStream os = con.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                writer.write(query);
+                writer.flush();
+                writer.close();
+                os.close();
+
+                int code = con.getResponseCode();
+                Log.d("code", code + "");
+
+                InputStream responseStream = new BufferedInputStream(con.getInputStream());
+                BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream));
+                serverResponse = responseStreamReader.readLine();
+                responseStreamReader.close();
+
+                serverResponse = Misc.getFormattedServerResponse(serverResponse);
+
+                Log.d("response", serverResponse);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return serverResponse;
+        }
+
+        @Override
+        protected void onPostExecute(String serverResponse) {
+            progressDialog.dismiss();
+            callback.done(serverResponse);
+            super.onPostExecute(serverResponse);
+        }
+    }
+
     public void fetchFriendshipDataInBackground(User user, Callback callback) {
         progressDialog.show();
         new FetchFriendshipDataAsyncTask(user, callback).execute();
@@ -475,6 +553,62 @@ public class ServerRequest {
                 writer.write(query);
                 writer.flush();
                 writer.close();
+                os.close();
+
+                int code = con.getResponseCode();
+                Log.d("code", code + "");
+
+                InputStream responseStream = new BufferedInputStream(con.getInputStream());
+                BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream));
+                serverResponse = responseStreamReader.readLine();
+                responseStreamReader.close();
+
+                serverResponse = Misc.getFormattedServerResponse(serverResponse);
+
+                Log.d("response", serverResponse);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return serverResponse;
+        }
+
+        @Override
+        protected void onPostExecute(String serverResponse) {
+            progressDialog.dismiss();
+            callback.done(serverResponse);
+            super.onPostExecute(serverResponse);
+        }
+    }
+
+    public void fetchWearableDataInBackground(Callback callback) {
+        progressDialog.show();
+        new FetchWearableDataAsyncTask(callback).execute();
+    }
+
+    public class FetchWearableDataAsyncTask extends AsyncTask<Void, Void, String> {
+
+        Callback callback;
+
+        public FetchWearableDataAsyncTask(Callback callback) {
+            this.callback = callback;
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            String serverResponse = "error";
+
+            try {
+                URL url = new URL(SERVER_ADDRESS + "get_all_wearables.php");
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setReadTimeout(CONNECTION_TIMEOUT);
+                con.setConnectTimeout(CONNECTION_TIMEOUT);
+                con.setRequestMethod("POST");
+                con.setDoInput(true);
+                con.setDoOutput(true);
+
+                OutputStream os = con.getOutputStream();
                 os.close();
 
                 int code = con.getResponseCode();

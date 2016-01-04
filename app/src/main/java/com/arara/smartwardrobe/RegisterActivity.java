@@ -55,6 +55,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     Misc.showAlertMsg("Passwords don't match.", "Ok", RegisterActivity.this);
                 } else if(serverResponse.equals("error")) {
                     Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", RegisterActivity.this);
+                    finish();
                 } else if(serverResponse.equals("success")) {
                     Misc.showAlertMsg("User successfully registered!", "Ok", RegisterActivity.this);
                     finish();

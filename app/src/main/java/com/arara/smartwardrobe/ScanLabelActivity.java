@@ -10,27 +10,26 @@ import java.util.List;
 
 public class ScanLabelActivity extends AppCompatActivity {
 
-    /*
-    Activity que permite ler o conteúdo de uma label, verifica se ela já foi cadastrada
-    no banco de dados e caso não tenha sido, permite que isso seja feito.
-    */
+    String labelTag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_label);
 
-        checkLabel();
+        labelTag = "12-3A-BC-DE"; //placeholder
+
+        //implementar bluetooth
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //checkLabel();
+        checkLabel();
     }
 
     private void checkLabel() {
-        String formattedTag = getFormattedTag("12-3A-BC-DE");
+        final String formattedTag = getFormattedTag(labelTag);
         Log.d("formattedTag", formattedTag);
         ServerRequest serverRequest = new ServerRequest(this);
         serverRequest.fetchTagDataInBackground(formattedTag, new Callback() {
@@ -41,8 +40,10 @@ public class ScanLabelActivity extends AppCompatActivity {
                     Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", ScanLabelActivity.this);
                     finish();
                 } else if (serverResponse.equals("no tag")) {
-                    Misc.showAlertMsg("Tag not found.", "Ok", ScanLabelActivity.this);
-                    //Registrar tag
+                    //Misc.showAlertMsg("Tag not found.", "Ok", ScanLabelActivity.this);
+                    Intent intent = new Intent(ScanLabelActivity.this, CreateTagActivity.class);
+                    intent.putExtra("tag", formattedTag);
+                    startActivity(intent);
                 } else {
                     Intent intent = new Intent(ScanLabelActivity.this, ViewWearableActivity.class);
                     intent.putExtra("selectedWearable", buildWearable(serverResponse));

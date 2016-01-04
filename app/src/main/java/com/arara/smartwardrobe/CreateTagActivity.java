@@ -8,38 +8,30 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MyWearablesActivity extends AppCompatActivity implements View.OnClickListener {
+public class CreateTagActivity extends AppCompatActivity {
 
     List<Wearable> wearablesList;
     ListView lvWearables;
-    Button bMyWishList;
 
-    TextView tvWearablesOwnerName;
+    String tag;
 
-    String wearablesOwner;
+    UserLocalStore userLocalStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_wearables);
+        setContentView(R.layout.activity_create_tag);
 
-        wearablesOwner = getIntent().getExtras().getString("owner");
-        Log.d("wearablesOwner", wearablesOwner);
+        tag = getIntent().getExtras().getString("tag");
+        Log.d("tag", tag);
 
-        tvWearablesOwnerName = (TextView) findViewById(R.id.tvWearablesOwnerName);
-        tvWearablesOwnerName.setText((wearablesOwner + "'s wearables").toUpperCase());
-
-        bMyWishList = (Button) findViewById(R.id.bMyWishList);
-        bMyWishList.setText(wearablesOwner + "'s WishList");
-        bMyWishList.setOnClickListener(this);
+        userLocalStore = new UserLocalStore(this);
 
         wearablesList = new ArrayList<>();
 
@@ -51,10 +43,27 @@ public class MyWearablesActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Wearable selectedWearable = (Wearable) lvWearables.getItemAtPosition(position);
-                //Misc.showAlertMsg("Clicked on " + selectedWearable, "Ok", MyWearablesActivity.this);
-                Intent intent = new Intent(MyWearablesActivity.this, ViewWearableActivity.class);
-                intent.putExtra("selectedWearable", selectedWearable);
-                startActivity(intent);
+                //Misc.showAlertMsg("Clicked on " + selectedWearable, "Ok", CreateTagActivity.this);
+                registerTag(selectedWearable);
+            }
+        });
+    }
+
+    private void registerTag(Wearable wearable) {
+        ServerRequest serverRequest = new ServerRequest(this);
+        serverRequest.storeTagDataInBackground(tag, userLocalStore.getLoggedUser(), wearable, new Callback() {
+            @Override
+            public void done(String serverResponse) {
+                Log.d("serverResponseTag", serverResponse);
+                if (serverResponse.equals("error")) {
+                    Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", CreateTagActivity.this);
+                    finish();
+                } else if (serverResponse.equals("failure")) {
+                    Misc.showAlertMsg("An error occurred.", "Ok", CreateTagActivity.this);
+                } else if(serverResponse.equals("success")) {
+                    Misc.showAlertMsg("Tag successfully created!", "Ok", CreateTagActivity.this);
+                    finish();
+                }
             }
         });
     }
@@ -65,27 +74,17 @@ public class MyWearablesActivity extends AppCompatActivity implements View.OnCli
         loadWearablesList();
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bMyWishList:
-                //startActivity(new Intent(this, MyWishlistActivity.class));
-                break;
-        }
-    }
-
     private void loadWearablesList() {
         ServerRequest serverRequest = new ServerRequest(this);
-        serverRequest.fetchUserWearableDataInBackground(new User(wearablesOwner), new Callback() {
+        serverRequest.fetchWearableDataInBackground(new Callback() {
             @Override
             public void done(String serverResponse) {
-                Log.d("serverResponseMyW", serverResponse);
+                Log.d("serverResponseW", serverResponse);
                 if (serverResponse.equals("error")) {
-                    Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", MyWearablesActivity.this);
-                    finish();
+                    Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", CreateTagActivity.this);
                 } else if (serverResponse.equals("no wearables")) {
                     Log.d("no wearable", "No wearable found");
-                    //Misc.showAlertMsg("No wearable found.", "Ok", MyWearablesActivity.this);
+                    //Misc.showAlertMsg("No wearable found.", "Ok", CreateTagActivity.this);
                 } else {
                     buildWearablesList(serverResponse);
                     ((BaseAdapter) lvWearables.getAdapter()).notifyDataSetChanged();
@@ -115,7 +114,6 @@ public class MyWearablesActivity extends AppCompatActivity implements View.OnCli
             newWearable.type = wearableData.get(2);
             newWearable.brand = wearableData.get(3);
             newWearable.description = wearableData.get(4);
-            newWearable.owner = wearablesOwner;
 
             wearablesList.add(newWearable);
         }

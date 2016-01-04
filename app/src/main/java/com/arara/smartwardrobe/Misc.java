@@ -2,10 +2,13 @@ package com.arara.smartwardrobe;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.util.Log;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Misc {

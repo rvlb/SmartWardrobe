@@ -25,7 +25,8 @@
         <activity android:name=".MyFriendsActivity" />
         <activity android:name=".MyWearablesActivity" />
         <activity android:name=".AddFriendActivity" />
-        <activity android:name=".ViewWearableActivity"></activity>
+        <activity android:name=".ViewWearableActivity" />
+        <activity android:name=".CreateTagActivity"></activity>
     </application>
 
 </manifest>
