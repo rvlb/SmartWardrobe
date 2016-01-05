@@ -54,6 +54,7 @@ public class MyWearablesActivity extends AppCompatActivity implements View.OnCli
                 //Misc.showAlertMsg("Clicked on " + selectedWearable, "Ok", MyWearablesActivity.this);
                 Intent intent = new Intent(MyWearablesActivity.this, ViewWearableActivity.class);
                 intent.putExtra("selectedWearable", selectedWearable);
+                intent.putExtra("showName", true);
                 startActivity(intent);
             }
         });
@@ -117,7 +118,6 @@ public class MyWearablesActivity extends AppCompatActivity implements View.OnCli
             newWearable.type = wearableData.get(2);
             newWearable.brand = wearableData.get(3);
             newWearable.description = wearableData.get(4);
-            newWearable.owner = wearablesOwner;
 
             wearablesList.add(newWearable);
         }

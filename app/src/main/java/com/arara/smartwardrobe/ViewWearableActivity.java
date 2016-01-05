@@ -34,7 +34,15 @@ public class ViewWearableActivity extends AppCompatActivity implements View.OnCl
         tvColors = (TextView) findViewById(R.id.tvColors);
         tvDescription = (TextView) findViewById(R.id.tvDescription);
 
-        tvOwner.setText((selectedWearable.owner + "'s wearable").toUpperCase());
+        String nameToShow = selectedWearable.toString();
+
+        if(getIntent().getExtras().getBoolean("showName")) {
+            //Se a activity foi chamada de algum lugar que não a Wish List, o nome do
+            //dono da wearable é exibido.
+            nameToShow = (selectedWearable.owner + "'s wearable").toUpperCase();
+        }
+
+        tvOwner.setText(nameToShow);
         tvType.setText(selectedWearable.type);
         tvBrand.setText(selectedWearable.brand);
         tvColors.setText(selectedWearable.colors);
@@ -67,7 +75,7 @@ public class ViewWearableActivity extends AppCompatActivity implements View.OnCl
                     Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", ViewWearableActivity.this);
                     finish();
                 } else if(serverResponse.equals("wishlist entry exists")) {
-                    Misc.showAlertMsg("This wearable is already in.", "Ok", ViewWearableActivity.this);
+                    Misc.showAlertMsg("This wearable is already in your WishList.", "Ok", ViewWearableActivity.this);
                 } else if(serverResponse.equals("failure")) {
                     Misc.showAlertMsg("An error occurred.", "Ok", ViewWearableActivity.this);
                 } else if(serverResponse.equals("success")) {

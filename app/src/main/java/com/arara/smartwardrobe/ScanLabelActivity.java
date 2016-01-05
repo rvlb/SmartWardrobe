@@ -47,6 +47,7 @@ public class ScanLabelActivity extends AppCompatActivity {
                 } else {
                     Intent intent = new Intent(ScanLabelActivity.this, ViewWearableActivity.class);
                     intent.putExtra("selectedWearable", buildWearable(serverResponse));
+                    intent.putExtra("showName", true);
                     startActivity(intent);
                 }
             }
