@@ -12,12 +12,6 @@
         android:text="Connect"
         android:id="@+id/bConnect" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Turn off"
-        android:id="@+id/bBluetooth" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

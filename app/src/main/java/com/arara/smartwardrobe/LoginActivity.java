@@ -51,15 +51,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         serverRequest.fetchUserDataInBackground(user, new Callback() {
             @Override
             public void done(String serverResponse) {
-                if(serverResponse.equals("error")) {
+                if(serverResponse.contains("error")) {
                     Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", LoginActivity.this);
-                } else if(serverResponse.equals("blank fields")) {
+                } else if(serverResponse.contains("blank fields")) {
                     Misc.showAlertMsg("Please fill all the fields.", "Ok", LoginActivity.this);
-                } else if(serverResponse.equals("invalid user")) {
+                } else if(serverResponse.contains("invalid user")) {
                     Misc.showAlertMsg("Invalid user.", "Ok", LoginActivity.this);
-                } else if(serverResponse.equals("wrong password")) {
+                } else if(serverResponse.contains("wrong password")) {
                     Misc.showAlertMsg("Wrong password.", "Ok", LoginActivity.this);
-                } else if(serverResponse.equals("success")) {
+                } else if(serverResponse.contains("success")) {
                     logUser(user);
                 }
             }

@@ -71,14 +71,14 @@ public class ViewWearableActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void done(String serverResponse) {
                 Log.d("serverResponseVW", serverResponse);
-                if (serverResponse.equals("error")) {
+                if (serverResponse.contains("error")) {
                     Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", ViewWearableActivity.this);
                     finish();
-                } else if(serverResponse.equals("wishlist entry exists")) {
+                } else if(serverResponse.contains("wishlist entry exists")) {
                     Misc.showAlertMsg("This wearable is already in your WishList.", "Ok", ViewWearableActivity.this);
-                } else if(serverResponse.equals("failure")) {
+                } else if(serverResponse.contains("failure")) {
                     Misc.showAlertMsg("An error occurred.", "Ok", ViewWearableActivity.this);
-                } else if(serverResponse.equals("success")) {
+                } else if(serverResponse.contains("success")) {
                     Misc.showAlertMsg("Wearable successfully added to your WishList!", "Ok", ViewWearableActivity.this);
                 }
             }

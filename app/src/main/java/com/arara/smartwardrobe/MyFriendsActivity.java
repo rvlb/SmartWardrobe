@@ -78,10 +78,10 @@ public class MyFriendsActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void done(String serverResponse) {
                 Log.d("serverResponseMyFr", serverResponse);
-                if(serverResponse.equals("error")) {
+                if(serverResponse.contains("error")) {
                     Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", MyFriendsActivity.this);
                     finish();
-                } else if(serverResponse.equals("no friends")) {
+                } else if(serverResponse.contains("no friends")) {
                     Log.d("no friend", "No friend found");
                     //Misc.showAlertMsg("No friend found.", "Ok", MyFriendsActivity.this);
                 } else {

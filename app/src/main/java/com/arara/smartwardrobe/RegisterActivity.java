@@ -45,18 +45,18 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void done(String serverResponse) {
                 Log.d("serverResponseReg", serverResponse);
-                if(serverResponse.equals("blank fields")) {
+                if(serverResponse.contains("blank fields")) {
                     Misc.showAlertMsg("Please fill all the fields.", "Ok", RegisterActivity.this);
-                } else if(serverResponse.equals("user exists")) {
+                } else if(serverResponse.contains("user exists")) {
                     Misc.showAlertMsg("User already exists.", "Ok", RegisterActivity.this);
-                } else if(serverResponse.equals("failure")) {
+                } else if(serverResponse.contains("failure")) {
                     Misc.showAlertMsg("An error occurred.", "Ok", RegisterActivity.this);
-                } else if(serverResponse.equals("different passwords")) {
+                } else if(serverResponse.contains("different passwords")) {
                     Misc.showAlertMsg("Passwords don't match.", "Ok", RegisterActivity.this);
-                } else if(serverResponse.equals("error")) {
+                } else if(serverResponse.contains("error")) {
                     Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", RegisterActivity.this);
                     finish();
-                } else if(serverResponse.equals("success")) {
+                } else if(serverResponse.contains("success")) {
                     Misc.showAlertMsg("User successfully registered!", "Ok", RegisterActivity.this);
                     finish();
                 }

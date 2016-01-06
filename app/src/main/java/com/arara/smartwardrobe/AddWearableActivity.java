@@ -83,18 +83,18 @@ public class AddWearableActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void done(String serverResponse) {
                 Log.d("serverResponseAddW", serverResponse);
-                if(serverResponse.equals("blank fields")) {
+                if(serverResponse.contains("blank fields")) {
                     Misc.showAlertMsg("Please fill all the fields.", "Ok", AddWearableActivity.this);
-                } else if(serverResponse.equals("wearable exists")) {
+                } else if(serverResponse.contains("wearable exists")) {
                     Misc.showAlertMsg("Wearable already exists.", "Ok", AddWearableActivity.this);
-                } else if(serverResponse.equals("full table")) {
+                } else if(serverResponse.contains("full table")) {
                     Misc.showAlertMsg("Full table.", "Ok", AddWearableActivity.this);
-                } else if(serverResponse.equals("error")) {
+                } else if(serverResponse.contains("error")) {
                     Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", AddWearableActivity.this);
                     finish();
-                } else if(serverResponse.equals("failure")) {
+                } else if(serverResponse.contains("failure")) {
                     Misc.showAlertMsg("An error occurred.", "Ok", AddWearableActivity.this);
-                } else if(serverResponse.equals("success")) {
+                } else if(serverResponse.contains("success")) {
                     Misc.showAlertMsg("Wearable successfully added!", "Ok", AddWearableActivity.this);
                     finish();
                 }

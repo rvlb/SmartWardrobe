@@ -46,20 +46,20 @@ public class AddFriendActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void done(String serverResponse) {
                 Log.d("serverResponseAddF", serverResponse);
-                if(serverResponse.equals("blank fields")) {
+                if(serverResponse.contains("blank fields")) {
                     Misc.showAlertMsg("Please fill all the fields.", "Ok", AddFriendActivity.this);
-                } else if(serverResponse.equals("same user")) {
+                } else if(serverResponse.contains("same user")) {
                     Misc.showAlertMsg("Please choose a user that isn't you.", "Ok", AddFriendActivity.this);
-                } else if(serverResponse.equals("friendship exists")) {
+                } else if(serverResponse.contains("friendship exists")) {
                     Misc.showAlertMsg("Friendship already exists.", "Ok", AddFriendActivity.this);
-                } else if(serverResponse.equals("invalid user")) {
+                } else if(serverResponse.contains("invalid user")) {
                     Misc.showAlertMsg("Invalid user.", "Ok", AddFriendActivity.this);
-                } else if(serverResponse.equals("error")) {
+                } else if(serverResponse.contains("error")) {
                     Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", AddFriendActivity.this);
                     finish();
-                } else if(serverResponse.equals("failure")) {
+                } else if(serverResponse.contains("failure")) {
                     Misc.showAlertMsg("An error occurred.", "Ok", AddFriendActivity.this);
-                } else if(serverResponse.equals("success")) {
+                } else if(serverResponse.contains("success")) {
                     Misc.showAlertMsg("Friendship successfully started!", "Ok", AddFriendActivity.this);
                     finish();
                 }

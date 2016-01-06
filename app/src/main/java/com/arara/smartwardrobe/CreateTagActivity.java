@@ -55,12 +55,12 @@ public class CreateTagActivity extends AppCompatActivity {
             @Override
             public void done(String serverResponse) {
                 Log.d("serverResponseTag", serverResponse);
-                if (serverResponse.equals("error")) {
+                if (serverResponse.contains("error".replace(" ", ""))) {
                     Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", CreateTagActivity.this);
                     finish();
-                } else if (serverResponse.equals("failure")) {
+                } else if (serverResponse.contains("failure".replace(" ", ""))) {
                     Misc.showAlertMsg("An error occurred.", "Ok", CreateTagActivity.this);
-                } else if(serverResponse.equals("success")) {
+                } else if(serverResponse.contains("success".replace(" ", ""))) {
                     Misc.showAlertMsg("Tag successfully created!", "Ok", CreateTagActivity.this);
                     finish();
                 }
@@ -80,9 +80,9 @@ public class CreateTagActivity extends AppCompatActivity {
             @Override
             public void done(String serverResponse) {
                 Log.d("serverResponseW", serverResponse);
-                if (serverResponse.equals("error")) {
+                if (serverResponse.contains("error")) {
                     Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", CreateTagActivity.this);
-                } else if (serverResponse.equals("no wearables")) {
+                } else if (serverResponse.contains("no wearables")) {
                     Log.d("no wearable", "No wearable found");
                     //Misc.showAlertMsg("No wearable found.", "Ok", CreateTagActivity.this);
                 } else {

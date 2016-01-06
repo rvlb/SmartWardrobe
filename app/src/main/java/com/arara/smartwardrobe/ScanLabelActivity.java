@@ -24,7 +24,7 @@ public class ScanLabelActivity extends AppCompatActivity implements View.OnClick
 
     String labelTag;
 
-    Button bConnect, bBluetooth;
+    Button bConnect;
 
     TextView tvDebug;
 
@@ -58,12 +58,10 @@ public class ScanLabelActivity extends AppCompatActivity implements View.OnClick
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         bConnect = (Button) findViewById(R.id.bConnect);
-        bBluetooth = (Button) findViewById(R.id.bBluetooth);
 
         tvDebug = (TextView) findViewById(R.id.tvDebug);
 
         bConnect.setOnClickListener(this);
-        bBluetooth.setOnClickListener(this);
     }
 
     private void turnBluetoothOff() {
@@ -107,11 +105,9 @@ public class ScanLabelActivity extends AppCompatActivity implements View.OnClick
 
     private class ConnectThread extends Thread {
         private final BluetoothSocket mmSocket;
-        private final BluetoothDevice mmDevice;
 
         public ConnectThread(BluetoothDevice device) {
             BluetoothSocket tmp = null;
-            mmDevice = device;
             try{
                 tmp = device.createRfcommSocketToServiceRecord(MY_UUID);
                 tvDebug.append("Socket created\n");
@@ -127,10 +123,10 @@ public class ScanLabelActivity extends AppCompatActivity implements View.OnClick
             bluetoothAdapter.cancelDiscovery();
             try {
                 mmSocket.connect();
-                tvDebug.append("Device is connected to " + mmDevice.getName() + "\n");
+                tvDebug.append("Device is connected" + "\n");
             } catch (IOException e) {
                 e.printStackTrace();
-                tvDebug.append("Unable to connect to " + mmDevice.getName() + "\n");
+                tvDebug.append("Unable to connect" + "\n");
                 try {
                     mmSocket.close();
                     tvDebug.append("Socket is closed\n");
@@ -180,12 +176,10 @@ public class ScanLabelActivity extends AppCompatActivity implements View.OnClick
                                     readBufferPosition = 0;
                                     handler.post(new Runnable() {
                                         public void run() {
-                                            tvDebug.append(data + "\n");
-                                            if(data.contains(searchThis) && !labelTag.equals(data.substring(data.indexOf(searchThis) + searchThis.length()))) {
+                                            if(data.contains(searchThis)) {
                                                 labelTag = data.substring(data.indexOf(searchThis)+searchThis.length());
                                                 Log.d("labelTag", "tag is " + labelTag);
-                                                checkLabelTemp();
-                                                //checkLabel();
+                                                checkLabel();
                                             }
                                         }
                                     });
@@ -208,24 +202,17 @@ public class ScanLabelActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onDestroy(){
         super.onDestroy();
+        turnBluetoothOff();
         connectThread.cancel();
     }
 
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
-            case R.id.bBluetooth:
-                turnBluetoothOff();
-                break;
             case R.id.bConnect:
                 connectToArduino();
                 break;
         }
-    }
-
-    private void checkLabelTemp() {
-        final String formattedTag = getFormattedTag(labelTag);
-        Misc.showAlertMsg(formattedTag, "Ok", ScanLabelActivity.this);
     }
 
     private void checkLabel() {
@@ -236,10 +223,10 @@ public class ScanLabelActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void done(String serverResponse) {
                 Log.d("serverResponseTag", serverResponse);
-                if (serverResponse.equals("error")) {
+                if (serverResponse.contains("error")) {
                     Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", ScanLabelActivity.this);
                     finish();
-                } else if (serverResponse.equals("no tag")) {
+                } else if (serverResponse.contains("no tag")) {
                     //Misc.showAlertMsg("Tag not found.", "Ok", ScanLabelActivity.this);
                     Intent intent = new Intent(ScanLabelActivity.this, CreateTagActivity.class);
                     intent.putExtra("tag", formattedTag);
@@ -256,7 +243,7 @@ public class ScanLabelActivity extends AppCompatActivity implements View.OnClick
 
     private String getFormattedTag(String inputTag) {
 
-        return (inputTag.toLowerCase()).replace(" ", "");
+        return ((inputTag.toLowerCase()).replace(" ", "")).substring(0, 7);
     }
 
     private Wearable buildWearable(String wearableString) {

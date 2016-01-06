@@ -21,7 +21,8 @@ public class Misc {
     }
 
     public static String getFormattedServerResponse(String response) {
-        return (response.replace("\"","")).replace("<br />","");
+        List<String> responseData = Arrays.asList(response.split("\""));
+        return responseData.get(1);
     }
 
     public static String getPostDataString(HashMap<String, String> data) throws UnsupportedEncodingException {

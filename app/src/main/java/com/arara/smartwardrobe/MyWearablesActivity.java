@@ -83,10 +83,10 @@ public class MyWearablesActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void done(String serverResponse) {
                 Log.d("serverResponseMyW", serverResponse);
-                if (serverResponse.equals("error")) {
+                if (serverResponse.contains("error")) {
                     Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", MyWearablesActivity.this);
                     finish();
-                } else if (serverResponse.equals("no wearables")) {
+                } else if (serverResponse.contains("no wearables")) {
                     Log.d("no wearable", "No wearable found");
                     //Misc.showAlertMsg("No wearable found.", "Ok", MyWearablesActivity.this);
                 } else {

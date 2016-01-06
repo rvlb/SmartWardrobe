@@ -66,10 +66,10 @@ public class MyWishListActivity extends AppCompatActivity {
             @Override
             public void done(String serverResponse) {
                 Log.d("serverResponseWL", serverResponse);
-                if (serverResponse.equals("error")) {
+                if (serverResponse.contains("error")) {
                     Misc.showAlertMsg("An error occurred while trying to connect.", "Ok", MyWishListActivity.this);
                     finish();
-                } else if (serverResponse.equals("no wearables")) {
+                } else if (serverResponse.contains("no wearables")) {
                     Log.d("no wearable", "No wearable found");
                     //Misc.showAlertMsg("No wearable found.", "Ok", MyWishListActivity.this);
                 } else {
