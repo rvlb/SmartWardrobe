@@ -6,4 +6,23 @@
     android:layout_height="match_parent"
     android:padding="50dp">
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Connect"
+        android:id="@+id/bConnect" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Turn off"
+        android:id="@+id/bBluetooth" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:id="@+id/tvDebug"
+        android:maxLines="1000"
+        android:scrollbars="vertical" />
 </LinearLayout>
